@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang = "en">  
+<head>    
+    <meta http-equiv="Content-type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="static/rentalproperty.css">
+	<link rel="icon" href="static/images/favicon.png" sizes="16x16 32x32" type="image/png">
+    <title>Admin</title>    	
+</head>
+
+<body>
+<header>
+    <img src = "static/images/riverside-rentals-logo.png" alt = "Rental Property Logo"
+         class = "header-img"/>
+</header>
+
+<nav>
+    <div class = "nav-container">
+        <div class = "nav-element">              <a href = "/">Home</a></div>
+        <div class = "nav-element">              <a href = "rental">Rental</a></div>
+        <div class = "nav-element">              <a href = "reviews">Reviews</a></div>
+        <div class = "nav-element" id = "active"><a href = "admin">Admin</a></div>
+    </div>  
+</nav>
+
+<section class="main-container">
+    <h1>Admin</h1>
+    <form action="/logout" >
+        <input class = "submit" type="submit" value="Log out">
+    </form>
+    <br>
+    <p>Hello, Admin.</p>
+    <h2>Rentals Admin</h2>
+    <p>Select "Confirm" on the entries below to confirm them, or "Delete" in order to free the reservations up 
+        for others. Click 'Submit' to approve the changes. Note: If both boxes are ticked, the entry is Deleted
+        and can not be recovered.</p>
+    <form action="confirmRental" method = "post">
+        <table class = "displayTable"> 
+            {% for line in aList %} 
+            {% set lineLoopIndex = loop.index0 %}
+            <tr> 
+                {% for item in line %}
+                <td>
+                    {%- if loop.index in [1,2,3,4] %} <!-- Print everything but confirmation status -->
+                        {{item}} 
+                    {% else %} <!-- Confirmation status - Show ticks in confirmed entries. -->
+                        {% if item == "Confirmed" %} <!-- Add a title to the column -->
+                            Check to <br> Confirm
+                        {% elif item == "y" %}
+                            <input type="checkbox" class="tickBox" name="confirm" 
+                                    value="{{ lineLoopIndex }}" checked disabled>
+                        {% else %}
+                            <input type="checkbox" class="tickBox" name="confirm" 
+                                    value="{{ lineLoopIndex }}">
+                        {% endif %}
+                    {% endif %}
+                </td>
+                {% endfor %}
+
+                <!-- Build tickboxes for the last column below-->
+                <td>
+                    {% if loop.index0 == 0 %} <!-- Add a title to the column -->
+                        Check to <br> Delete
+                    {% else %} 
+                        <input type="checkbox" class="tickBox" name="delete"  value="{{ loop.index0 }}">
+                    {% endif %}
+                </td>
+            </tr> 
+            {% endfor %} 
+            <!-- Align Confirm button -->
+            <tr><td></td><td></td><td></td><td></td><td></td>
+            <td><input class="submit" type="submit" value="Submit"></td></tr>
+        </table>
+    </form> 
+    <br>
+
+    <h2>Comments Admin</h2>
+    <p>Select any comments below and click "Delete" to remove them. 
+        WARNING: Deleted comments can not be recovered!</p>
+    <form action="deleteComment" method = "post"> 
+        <table class = "displayTable">
+            {% for line in bList %}
+                <tr> 
+                    {% for item in line%}
+                        <td>{{item}}</td>
+                    {% endfor %}
+                    {% if loop.index0 == 0 %} <!-- Add a title again -->
+                        <td>Check to <br> Delete</td>
+                    {% else %}
+                        <td><input type="checkbox" class="tickBox" name="delete" value="{{ loop.index0 }}"></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            <!-- More dirty code. -->
+            <tr><td></td><td></td><td></td><td><input class="submit" type="submit" value="Delete"></td></tr>
+        </table>
+    </form>
+    <br>
+</section>
+</body>
+</html>

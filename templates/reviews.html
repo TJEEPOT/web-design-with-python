@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang = "en">  
+<head>    
+    <meta http-equiv="Content-type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="static/rentalproperty.css">
+	<link rel="icon" href="static/images/favicon.png" sizes="16x16 32x32" type="image/png">
+    <title>Reviews</title>    	
+</head>  
+<body>
+    <header>
+        <img src = "static/images/riverside-rentals-logo.png" alt = "Rental Property Logo"
+             class = "header-img"/>
+    </header>
+    
+    <nav>
+        <div class = "nav-container">
+            <div class = "nav-element"><a href = "/">Home</a></div>
+            <div class = "nav-element"><a href = "rental">Rental</a></div>
+            <div class = "nav-element" id = "active"><a href = "reviews">Reviews</a></div>
+            <div class = "nav-element"><a href = "admin">Admin</a></div>
+        </div>
+    </nav>
+
+    <section class="main-container">
+        <h1>Reviews</h1>
+        <p>Hear what our customers have to say about us, and feel free to leave a message for others, too!</p>
+        <form action = "addReview" method = "post">
+            <div class="form-row">
+                <label class = "review">Full Name:</label>
+                <input type = "text" name = "name">
+            </div>
+            <div class="form-row">
+                <label class = "review">Review:</label>
+                <textarea name = "review"></textarea>
+            </div>
+            <input class = "submit" type = "submit" value = "Submit">
+        </form>
+    
+        <br><br><h2>Previous Reviews</h2>
+        <table class = "displayTable">
+            {% for line in aList %}
+                <tr>
+                    {% for item in line%}
+                    <td>
+                        {{item}}
+                    </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        <br>
+    </section>
+
+    <footer>
+        <h3>Contact</h3>
+        <p>1 Fake Street, Norwich NR14 567 || 01234 567 890 || <u>
+        <a href = "mailto:inquiries@riversiderentals.com?Subject=Website%20Inquiry" 
+           target = "_top">inquiries@riversiderentals.com</a></u></p>
+    </footer>
+</body>
+</html>

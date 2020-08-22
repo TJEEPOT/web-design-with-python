@@ -1,0 +1,313 @@
+
+/*body*/
+body {
+  display: flex;
+  flex-direction: column;
+  min-width: 520px;
+	max-width: 960px;
+	margin: auto; 
+	color: #555555;	
+	text-align: justify; 
+	font-family: helvetica, sans-serif, arial;
+}
+/*body*/
+
+/*header*/
+.header-img{
+  flex: 0,1, 100%;
+  max-width: 100%;
+}
+/*header*/
+
+/*navbar*/
+.nav-container {
+  display: flex;
+  align-items: stretch;
+  flex: 0, 1, 100%;
+  max-width: 100%;
+  padding-bottom: 5px;
+}
+
+.nav-element{
+  width: 25%;
+}
+
+.nav-element a {
+  display: block;
+  max-width: 100%;
+	color: #444;
+	padding: 8px 16px;
+  text-decoration: none;
+	text-align: center; 
+	background-color: #999;
+}
+
+@media all and (max-width: 650px){
+  .nav-container{
+  flex-flow: column wrap;
+  }
+
+  .nav-element{
+    width: 100%;
+  }
+}
+
+.nav-element a:visited { 
+  text-decoration: none; 
+  color: #FFF;
+}
+
+.nav-element a:hover {
+  background-color: #555;
+  color: #FFF;
+}
+
+#active a{
+  background-color: #555;
+  color: #FFF;
+}
+/*navbar*/
+
+/*section*/
+#description {
+	width: 48%;
+  float: left;
+  margin-left: 3px;
+	margin-right: 5px;
+}
+
+#map {
+	width: 49%;
+	float: right;
+	margin-left: 5px; 
+}
+
+iframe { 
+	width: 100%;
+	height: 300px; 
+	border: none; 
+}
+
+a:link {
+  color: #bfe6e6;
+}
+
+a:hover{
+  color: #7fb32c;
+}
+
+a:visited{
+  color: #a35b97;
+}
+
+/*section*/
+
+/*slideshow ref: https://www.w3schools.com/howto/howto_js_slideshow.asp*/
+* {box-sizing:border-box}
+
+/* Slideshow container */
+.slideshow-container {
+  max-width: 1000px;
+  position: relative;
+  margin: auto;
+  clear: both; 
+}
+
+/* Hide the images by default */
+.mySlides {
+	display: none;
+}
+
+.block {
+	display: block;
+}	
+
+/* Next & previous buttons */
+.prev, .next {
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  width: auto;
+  padding: 16px;
+  color: #FFFFFF;
+  font-weight: bold;
+  font-size: 30px;
+  transition: 0.6s ease;
+  border-radius: 0 3px 3px 0;
+  user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover, .next:hover {
+  background-color: rgba(0,0,0,0.8);
+}
+
+/* Caption text */
+.text {
+  color: #ffffff;
+  font-size: 20px;
+  padding: 8px 12px;
+  position: absolute;
+  bottom: 8px;
+  width: 100%;
+  text-align: center;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+  color: #ffffff;
+  font-size: 12px;
+  padding: 8px 12px;
+  position: absolute;
+  display: inline;
+  top: 0;
+}
+
+/* The dots/bullets/indicators */
+.dots {
+	text-align: center;
+	margin: 3px 0px; 
+}
+
+.dot {
+  cursor: pointer;
+  height: 15px;
+  width: 15px;
+  margin: 0 2px;
+  background-color: #CFCFCF;
+  border-radius: 50%;
+  display: inline-block;
+  transition: background-color 0.6s ease;
+}
+
+.active, .dot:hover {
+  background-color: #555555;
+}
+
+/* Fading animation */
+.fade {
+  -webkit-animation-name: fade;
+  -webkit-animation-duration: 1.5s;
+  animation-name: fade;
+  animation-duration: 1.5s;
+}
+
+@-webkit-keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+
+@keyframes fade {
+  from {opacity: .4} 
+  to {opacity: 1}
+}
+/*slideshow*/
+
+
+/* Container for main page content */
+.main-container{
+	position: relative;
+	margin: auto;
+	clear: both; 
+}
+
+
+/* tables */
+table{
+	border: 2px solid #555;
+}
+
+td{
+  padding: 3px 8px 3px 8px;
+}
+
+.displayTable tr:first-child td{ /* settings for the first line */
+	background-color: #2B5B83;
+	color: #FFF;
+	font-weight: bold;
+	padding: 4px;
+}
+
+tr:nth-child(even){ /* Settings for every other line */
+	background-color: #BBB;
+}
+/*tables*/
+
+
+/* forms */
+form{ /* Setting the forms up as a CSS Table allows easy positioning of elements */
+	display: table; 
+}
+
+.form-row {
+  display: table-row;
+}
+
+label{
+	display: table-cell;
+	padding-right: 5px;
+	text-align: right;
+}
+
+.review {
+	display: inline;
+}
+
+input{
+	display: table-cell;
+	width: 300px;
+	padding: 2px;
+	margin-top: 3px;
+} 
+
+textarea {
+	width: 100%;
+	height: 150px;
+}
+
+input#start, input#end{
+	width: 100px;
+}
+
+input.submit, button{
+	width: 100px;
+	background-color: #2B5B83;
+	border: none;
+	color: #FFF;
+	font-size: 18px;
+}
+
+input.submit, button:hover{
+	cursor: pointer; 
+}
+
+button{
+  width: 200px;
+  margin-top: 3px;
+}
+
+button:hover {
+	cursor: pointer;
+}
+
+input.tickBox{
+  width: 20px;
+}
+/*forms*/
+
+/*footer*/
+footer {
+	color: #FFFFFF;
+	clear: both;
+	width: 100%;
+	padding: 10px 0px;
+	text-align: center;
+	background-color: #2B5B83;
+}
+/*footer*/

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang = "en">  
+<head>    
+    <meta http-equiv="Content-type" content="text/html;charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="static/rentalproperty.css">
+    <link rel="stylesheet" type="text/css" href="static/pikaday.css">
+	<link rel="icon" href="static/images/favicon.png" sizes="16x16 32x32" type="image/png">
+    <title>Rental</title>  
+</head>  
+
+<body>
+    <header>
+        <img src = "static/images/riverside-rentals-logo.png" alt = "Rental Property Logo"
+             class = "header-img"/>
+    </header>
+
+    <nav>
+        <div class = "nav-container">
+            <div class = "nav-element"><a href = "/">Home</a></div>
+            <div class = "nav-element" id = "active"><a href = "rental">Rental</a></div>
+            <div class = "nav-element"><a href = "reviews">Reviews</a></div>
+            <div class = "nav-element"><a href = "admin">Admin</a></div>
+        </div>
+    </nav>
+
+    <section class="main-container">
+        <h1>Rental Request</h1>
+        <p>Submit your rental request on the below form. You can also see the current dates the property 
+            is booked or due to be booked out.</p>
+
+        <form id="rentalForm" action="rentalRequest" method = "post"> 
+            <div class="form-row">
+                <label>Date From:</label>
+                <input type="text" id="start" name="fromDate" readonly><br>
+            </div>
+            <div class="form-row">
+                <label>Date To:</label> 
+                <input type="text" id="end" name="toDate" readonly><br>
+            </div>
+            <div class="form-row"> 
+                <label>Full Name:</label> 
+                <input type="text" name="name" required><br>
+            </div>
+            <div class="form-row">
+                <label>Email:</label> 
+                <input type="email" name="email" required><br>
+            </div>
+            <input onclick="return validateDates();" class="submit" type="submit" value="Submit">
+        </form>
+
+        <script>
+            function validateDates()
+            {
+                // Validator for date fields.
+                var form = document.getElementById("rentalForm");
+                var fromDate = form.elements[0].value;
+                var toDate = form.elements[1].value;
+                if (fromDate == "")
+                {
+                    alert("Missing 'From' date!");
+                    return false;
+                }
+                else if (toDate == "")
+                {
+                    alert("Missing 'To' date!");
+                    return false;
+                }
+                else if (fromDate == toDate)
+                {
+                    alert("You can't hire for less than one night!");
+                    return false;
+                }
+                // Validator for previously booked dates
+                var booked = []
+                var bookingAttempt = []
+                {% for item in bList %}
+                    booked.push("{{ item }}"); // build 'booked' array from list sent from server.
+                {% endfor %}
+
+                var fromDate = new Date(fromDate);
+                var toDate = new Date(toDate);
+                
+                // Building a list of dates, with help from https://stackoverflow.com/a/4413721
+                bookingAttempt = getDates(fromDate, toDate);
+                var i;
+                for (i = 0; i < bookingAttempt.length; i++)
+                {
+                    if (booked.indexOf(bookingAttempt[i]) > 0)
+                    {
+                        alert("The property has already been booked between those dates, please check and try again.");
+                        return false;
+                    }
+                }
+                return true;
+            }
+            
+            // This, again from https://stackoverflow.com/a/4413721
+            Date.prototype.addDays = function(days) 
+            {
+                var dat = new Date(this.valueOf())
+                dat.setDate(dat.getDate() + days);
+                return dat;
+            }
+
+            function getDates(startDate, stopDate) 
+            {
+                var dateArray = [];
+                var currentDate = startDate;
+                while (currentDate <= stopDate) 
+                {
+                    isoDate = new Date(currentDate)
+                    dateArray.push(isoDate.toISOString().slice(0, 10));
+                    currentDate = currentDate.addDays(1);
+                }
+                return dateArray;
+            }       
+        </script>
+
+        <button onclick="calculatePrice()">Calculate Price</button>
+        <br>
+        <p id="price"></p>
+        <script> 
+            function calculatePrice()
+            {   // Made with help from: https://stackoverflow.com/questions/2627473/
+                // how-to-calculate-the-number-of-days-between-two-dates
+                var aDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+                var form = document.getElementById("rentalForm");
+                var dateFrom = new Date(form.elements[0].value);
+                var dateTo = new Date(form.elements[1].value);
+                var daysBetween = Math.round(Math.abs((dateFrom.getTime()
+                                - dateTo.getTime())/(aDay)));
+                if (!daysBetween)
+                {
+                    alert("Please enter 'From' and 'To' dates first!")
+                }
+                else
+                {
+                    var cost = "The cost of " + daysBetween + " nights of rental is £" + (daysBetween * 110);
+                    document.getElementById("price").innerHTML = cost;
+                }
+            }
+        </script>
+
+        <br>
+        <h2>Current Rentals</h2>
+        <table class = "displayTable"> 
+            {% for line in aList %} 
+            <tr> 
+                {% for item in line %}
+                    {%- if loop.index in [1,2,5] %} <!-- Only continue if printing column 1, 2 and 5. -->
+                    <td> 
+                        {{item}} 
+                    </td>
+                    {% endif %}
+                {% endfor %} 
+            </tr> 
+            {% endfor %} 
+        </table>
+        <br>
+    </section>
+
+    <footer>
+        <h3>Contact</h3>
+        <p>1 Fake Street, Norwich NR14 567 || 01234 567 890 || <u>
+        <a href = "mailto:inquiries@riversiderentals.com?Subject=Website%20Inquiry" 
+           target = "_top">inquiries@riversiderentals.com</a></u></p>
+    </footer>
+
+    <!-- The scripts below enable JS calender functionality. 
+    Base code was provided in date-range.html as part of the pikaday project 
+    files and the basic 'toString' formatting code was provided in README.md of 
+    the project. See https://github.com/Pikaday/Pikaday for more information. -->
+
+    <script src="static/pikaday.js"></script>
+    <script>
+        var startDate,
+            endDate,
+            updateStartDate = function() {
+                startPicker.setStartRange(startDate);
+                endPicker.setStartRange(startDate);
+                endPicker.setMinDate(startDate);
+            },
+            updateEndDate = function() {
+                startPicker.setEndRange(endDate);
+                startPicker.setMaxDate(endDate);
+                endPicker.setEndRange(endDate);
+            },
+            startPicker = new Pikaday({
+                field: document.getElementById('start'),
+                format: 'YYYY-MM-DD',
+                toString(date, format) { // Changed this from README.md example to fit established date format.
+                    const day = ('0' + date.getDate()).slice(-2); // Add a leading zero if date is less than '9'.
+                    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    const year = date.getFullYear();
+                    return `${year}-${month}-${day}`;
+                },
+                minDate: new Date(), 
+                maxDate: new Date(2100, 12, 31), // Custom edit to field here to change max date.
+                onSelect: function() {
+                    startDate = this.getDate();
+                    updateStartDate();
+                }
+            }),
+            endPicker = new Pikaday({
+                field: document.getElementById('end'),
+                format: 'YYYY-MM-DD',
+                toString(date, format) { // Same formatting change as above. 
+                    const day = ('0' + date.getDate()).slice(-2);
+                    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+                    const year = date.getFullYear();
+                    return `${year}-${month}-${day}`;
+                },
+                minDate: new Date(),
+                maxDate: new Date(2100, 12, 31), // Custom edit again to change max date.
+                onSelect: function() {
+                    endDate = this.getDate();
+                    updateEndDate();
+                }
+            }),
+            _startDate = startPicker.getDate(),
+            _endDate = endPicker.getDate();
+    
+        if (_startDate) {
+            startDate = _startDate;
+            updateStartDate();
+        }
+
+        if (_endDate) {
+            endDate = _endDate;
+            updateEndDate();
+        }
+    </script>
+</body>
+</html>
